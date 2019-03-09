@@ -1,9 +1,17 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-　
-　#Helper に定義していた logged_in? を使用しているが、
-　#Controller から Helper のメソッドを使うことはデフォルトではできないため
-　include SessionsHelper
+ #Helper に定義していた logged_in? を使用しているが、
+ #Controller から Helper のメソッドを使うことはデフォルトではできないため
+ # include Module これで、Module内のメソッドをそのクラスのインスタンスメソッドとして取り込むことができる
+ # これをMix-inという
+ # 逆にhelperModuleは、viewからであればどこからでも呼び出すことができる
+ include SessionsHelper
+ # ちなみにextend Module というのもある。これはModule内のメソッドをクラスメソッドとして取り込むときに使う
+ # extend SessionsHelper
+ # 
+ # def self.current_user
+ #   ～
+ # end
 
   private
 
@@ -11,5 +19,9 @@ class ApplicationController < ActionController::Base
     unless logged_in?
       redirect_to login_url
     end
+  end
+  #Micropost の数のカウントを View で表示するとき
+  def counts(user)
+    @count_microposts = user.microposts.count
   end
 end

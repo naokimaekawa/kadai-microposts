@@ -10,4 +10,6 @@ class User < ApplicationRecord
   #Rails の標準機能にある has_secure_password を利用
   #暗号化のために bcrypt Gem が必要
   has_secure_password
+  #User のインスタンスが自分の Microposts を取得することができる
+  has_many :microposts
 end
