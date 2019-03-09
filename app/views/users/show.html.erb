@@ -18,5 +18,7 @@
       <li><a href="#">Followings</a></li>
       <li><a href="#">Followers</a></li>
     </ul>
+    <%# userのページでmicropostを表示するために必要%>
+    <%= render 'microposts/microposts', microposts: @microposts %>
   </div>
 </div>
