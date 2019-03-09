@@ -42,4 +42,13 @@ class User < ApplicationRecord
   def following?(other_user)
     self.followings.include?(other_user)
   end
+  
+  #タイムライン用
+  #following_ids(User がフォローしている User の id の配列) 
+  #は User モデルの has_many :followings, ... によって自動的に生成されるメソッド
+  #user_idが、self.following_idsであるものと、self.idであるものを表示する
+  def feed_microposts
+    Micropost.where(user_id: self.following_ids + [self.id])
+  end
+  
 end
