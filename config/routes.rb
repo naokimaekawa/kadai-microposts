@@ -8,7 +8,20 @@ Rails.application.routes.draw do
   delete 'logout', to: 'sessions#destroy'
   
   get 'signup', to: 'users#new'
-  resources :users, only: [:index, :show, :new, :create]
   
+  #do endの二重構造。[URL深堀:member,collection]
+  resources :users, only: [:index, :show, :new, :create] do
+    member do #users/:idの先に、followingsとfollowersのURLを作成している
+      get :followings
+      get :followers
+    end
+    #collection do #usersの先に、searchのURLを作成可能
+      #get :search
+    #end
+  end
+
   resources :microposts, only: [:create, :destroy]
+  
+  resources :relationships, only: [:create, :destroy]
+  
 end

@@ -10,6 +10,36 @@ class User < ApplicationRecord
   #Rails の標準機能にある has_secure_password を利用
   #暗号化のために bcrypt Gem が必要
   has_secure_password
+  
+  #micropostsをもっている
   #User のインスタンスが自分の Microposts を取得することができる
   has_many :microposts
+  
+  #followしてる
+  #User のインスタンスが自分の Relationships を取得することができる
+  has_many :relationships
+  #自分がfollowしている人[followings]とは、relationships[中間table]を通じて、follow.id（followings.idの方がわかりやすい気がする）を参照しなさい
+  has_many :followings, through: :relationships, source: :follow
+  #followされている。reverses_of_relationshipsのところは独自に決めてよい。
+  has_many :reverses_of_relationship, class_name: 'Relationship', foreign_key: 'follow_id'
+  #followerとは、relationships[中間table]を通じて、user.idを参照しなさい
+  has_many :followers, through: :reverses_of_relationship, source: :user
+  
+  #フォロー／アンフォロー機能
+  
+  def follow(other_user)
+    unless self == other_user
+      self.relationships.find_or_create_by(follow_id: other_user.id)
+    end
+  end
+
+  def unfollow(other_user)
+    relationship = self.relationships.find_by(follow_id: other_user.id)
+    # いればrelationshipはnilにならない
+    relationship.destroy if relationship
+  end
+
+  def following?(other_user)
+    self.followings.include?(other_user)
+  end
 end
