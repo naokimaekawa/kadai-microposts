@@ -15,6 +15,29 @@ class User < ApplicationRecord
   #User のインスタンスが自分の Microposts を取得することができる
   has_many :microposts
   
+  #メソッドにもなる
+  #like_relationshipsをもっている
+  #has_many :のあとは、mysqlのtable名
+  has_many :like_relationships dependent: :destroy #お気に入り登録中でも消すことができる[紐づくオブジェクトも消えるということ]
+  has_many :likeposts, through: :like_relationships, source: :like
+  #クラス、つまり、modelである
+  has_many :reverses_of_like_relationships, class_name: 'LikeRelationship', foreign_key: 'like_id'
+  has_many :likers, through: :reverses_of_like_relationships, source: :user
+  
+  #local変数渡し
+  def like(new_micropost)
+    self.like_relationships.find_or_create_by(like_id: new_micropost.id)
+  end
+
+  def unlike(like_micropost)
+    like_relationship = self.like_relationships.find_by(like_id: like_micropost.id)
+    like_relationship.destroy if like_relationship
+  end
+
+  def likeposts?(certain_micropost)
+    self.likeposts.include?(certain_micropost)
+  end
+  
   #followしてる
   #User のインスタンスが自分の Relationships を取得することができる
   has_many :relationships
@@ -49,6 +72,11 @@ class User < ApplicationRecord
   #user_idが、self.following_idsであるものと、self.idであるものを表示する
   def feed_microposts
     Micropost.where(user_id: self.following_ids + [self.id])
+  end
+  
+  def like_microposts
+  #は User モデルの has_many :likes, ... によって自動的に生成されるメソッド
+    Micropost.where(id: self.likepost_ids)
   end
   
 end

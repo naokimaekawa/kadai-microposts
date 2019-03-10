@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   #follow機能前にも忘れずに
-  before_action :require_user_logged_in, only: [:index, :show, :followings, :followers]
+  before_action :require_user_logged_in, only: [:index, :show, :followings, :followers, :likeposts]
   
   def index
     @users = User.all.page(params[:page])
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     end
   end
   
-  #follow機能
+  #follow機能　user.rbで定義したfollowingsやfollowersを利用
   
   def followings
     @user = User.find(params[:id])
@@ -40,6 +40,15 @@ class UsersController < ApplicationController
   def followers
     @user = User.find(params[:id])
     @followers = @user.followers.page(params[:page])
+    counts(@user)
+  end
+  
+  #like機能　user.rbで定義したlike_micropostsを利用
+  
+  def likeposts #application_controllerでも使われる
+    @user = User.find(params[:id])
+    @likeposts = @user.like_microposts.page(params[:page])
+    #application_controllerのcountsを利用。
     counts(@user)
   end
 

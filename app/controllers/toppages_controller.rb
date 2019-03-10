@@ -11,6 +11,8 @@ class ToppagesController < ApplicationController
     
     #feed_micropostsに変更
     @microposts = current_user.feed_microposts.order('created_at DESC').page(params[:page])
+    
+    @likeposts = current_user.like_microposts.order('created_at DESC').page(params[:page])
    
    end
   end

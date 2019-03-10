@@ -2,13 +2,15 @@
   <aside class="col-xs-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title"><%= @user.name %></h3>
+        <h3 class="panel-title"><%= @user %></h3>
       </div>
       <div class="panel-body">
         <img class="media-object img-rounded img-responsive" src="<%= gravatar_url(@user, { size: 500 }) %>" alt="">
       </div>
     </div>
+    
     <%= render 'relationships/follow_button', user: @user %>
+    
   </aside>
   <div class="col-xs-8">
     <ul class="nav nav-tabs nav-justified">
@@ -17,7 +19,8 @@
       <li class="<%= 'active' if current_page?(followers_user_path(@user)) %>"><%= link_to followers_user_path(@user) do %>Followers <span class="badge"><%= @count_followers %></span><% end %></li>
       <li class="<%= 'active' if current_page?(likeposts_user_path(@user)) %>"><%= link_to likeposts_user_path(@user) do %>お気に入り <span class="badge"><%= @count_likeposts %></span><% end %></li>
     </ul>
-    <%# followersを表示するために必要。@followersは、users_controllerで定義している%>
-    <%= render 'users', users: @followers %>
+    <%# likepostsのカウントは、application_controllerで定義している%>
+    <%# likepostsを表示するために必要。@likepostsは、toppage_controllerで定義している%>
+    <%= render 'microposts/microposts', microposts: @likeposts %>
   </div>
 </div>

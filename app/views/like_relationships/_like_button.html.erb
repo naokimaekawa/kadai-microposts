@@ -1,0 +1,17 @@
+<%# views#microposts#_microposts.html.erbからきたmicropost%>
+<% if current_user.likeposts?(micropost) %>
+    <%= form_for(current_user.like_relationships.find_by(like_id: micropost.id), html: { method: :delete }) do |f| %>
+      
+      <%#relationships_controllerにmicropost.idをlike_idとして渡す %>
+      <%= hidden_field_tag :like_id, micropost.id %>
+      <%= f.submit 'Unlike', class: 'btn btn-danger btn-block' %>
+    
+    <% end %>
+  <% else %>
+    <%= form_for(current_user.like_relationships.build) do |f| %>
+      
+      <%= hidden_field_tag :like_id, micropost.id %>
+      <%= f.submit 'Like', class: 'btn btn-primary btn-block' %>
+    
+    <% end %>
+<% end %>
