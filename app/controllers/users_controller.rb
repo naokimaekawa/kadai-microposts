@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   
   #like機能　user.rbで定義したlike_micropostsを利用
   
-  def likeposts #application_controllerでも使われる
+  def likes #application_controllerでも使われる
     @user = User.find(params[:id])
     @likeposts = @user.like_microposts.page(params[:page])
     #application_controllerのcountsを利用。

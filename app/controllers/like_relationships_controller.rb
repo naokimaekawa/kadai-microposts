@@ -9,7 +9,8 @@ class LikeRelationshipsController < ApplicationController
     micropost = Micropost.find(params[:like_id])
     current_user.like(micropost)
     flash[:success] = 'micropostをお気に入りに入れました。'
-    redirect_to root_url
+    # redirect_to root_url
+    redirect_back(fallback_location: root_url)
   end
 
   def destroy
@@ -18,6 +19,7 @@ class LikeRelationshipsController < ApplicationController
     micropost = Micropost.find(params[:like_id])
     current_user.unlike(micropost)
     flash[:success] = 'micropostをお気に入りから外しました。'
-    redirect_to root_url
+    # redirect_to root_url
+    redirect_back(fallback_location: root_url)
   end
 end

@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     member do #users/:idの先に、followingsとfollowersのURLを作成している
       get :followings
       get :followers
-      get :likeposts
+      get :likes
     end
     #collection do #usersの先に、searchのURLを作成可能
       #get :search

@@ -18,11 +18,14 @@ class User < ApplicationRecord
   #メソッドにもなる
   #like_relationshipsをもっている
   #has_many :のあとは、mysqlのtable名
-  has_many :like_relationships dependent: :destroy #お気に入り登録中でも消すことができる[紐づくオブジェクトも消えるということ]
+  has_many :like_relationships, dependent: :destroy #お気に入り登録中でも消すことができる[紐づくオブジェクトも消えるということ]
   has_many :likeposts, through: :like_relationships, source: :like
   #クラス、つまり、modelである
   has_many :reverses_of_like_relationships, class_name: 'LikeRelationship', foreign_key: 'like_id'
   has_many :likers, through: :reverses_of_like_relationships, source: :user
+  
+  # has_many :like_relationships
+  # has_many :microposts, through: :like_relationships, source: :like
   
   #local変数渡し
   def like(new_micropost)
